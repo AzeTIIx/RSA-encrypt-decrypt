@@ -2,6 +2,7 @@ from Generateprimes import generate_primes
 from RSAencrypt import outputs
 from RSAencrypt import encrypt
 from RSAdecrypt import decrypt
+import OpenSSLcheck
 
 
 
@@ -14,7 +15,7 @@ def home():
 def menu():
     #source code from https://computinglearner.com/how-to-create-a-menu-for-a-python-console-application/
     print("\n\n")
-    options = {1: 'Generate a random prime number',2: 'Encrypt',3: 'Decrypt',4: 'Exit',}
+    options = {1: 'Generate a random prime number',2: 'Encrypt',3: 'Decrypt',4:'OpenSSl Keygen', 5: 'Exit',}
 
     def print_menu():
         for key in options.keys():
@@ -31,6 +32,9 @@ def menu():
     def option3():
         decrypt()
 
+    def option4():
+        OpenSSLcheck.create_file()
+
     if __name__=='__main__':
         while(True):
             print_menu()
@@ -46,6 +50,8 @@ def menu():
             elif option == 3:
                 option3()
             elif option == 4:
+                option4()
+            elif option == 5:
                 print('Thanks for using our program :)')
                 exit()
             else:
