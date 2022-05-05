@@ -4,13 +4,13 @@ import time
 import random
 rand = random.SystemRandom()
 
-
 def factors():
     """
     It asks the user for a number of bits, then generates two random primes of that length, and returns
     the product of those primes and the totient of that product
-    :return: phi, n
+    :return: n, phi
     """
+    global p, q
     b = int(input("You want your factors n q to be what length (bits) : "))
     p = generate_primes(b)
     q = generate_primes(b)
@@ -34,7 +34,7 @@ def gcd_e(n, phi): #totient of n
         gcd = int(math.gcd(e, phi))
         if gcd == 1:
             break
-    print("We have e = ",e)
+    print("We have e = ", e)
     return e
 
 def find_inv(e, phi): #private key d
@@ -45,21 +45,26 @@ def find_inv(e, phi): #private key d
     :param phi: the totient of n
     :return: The private key d
     """
-    timestart = time.time()
-    for d in range(1,phi):
-        if((e%phi)*(d%phi) % phi==1):
-            print(f"We have d = %d found in {time.time() - timestart} seconds" %d)
-            return d
+    #source : https://inventwithpython.com/cryptomath.py
+    if math.gcd(e, phi) != 1:
+            return None # no mod inverse if a & m aren't relatively prime
 
+        # Calculate using the Extended Euclidean Algorithm:
+    d, u2, u3 = 1, 0, e
+    v1, v2, v3 = 0, 1, phi
+    while v3 != 0:
+        q = u3 // v3
+        v1, v2, v3, d, u2, u3 = (d - q * v1), (u2 - q * v2), (u3 - q * v3), v1, v2, v3
+    return d % phi
 
 def outputs():
     global e, n, d
     n, phi = factors()
     e = gcd_e(n, phi)
     d = find_inv(e, phi)
+    print("We have d = %d" %d)
     print("Public key : ", n, e)
     print("Private key : ", d)
-
 
 def input_text():
     """
@@ -92,6 +97,9 @@ def recup():
     global encrypt_list, n, d
     return encrypt_list, n, d
 
+def recup_ssl():
+    global n, d, p, q, e
+    return n, d, p, q, e
 
 
 
