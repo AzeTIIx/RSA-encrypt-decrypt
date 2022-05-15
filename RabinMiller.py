@@ -8,15 +8,21 @@ def prime_test(n, a):
     :param a: the number to be tested
     :return: True or False
     """
+
     x = n - 1
     while not x & 1:
-        x >>=1
+        x >>=1 #simplifier le code (//2, %2 etc while x%2 == 0 alors x/=2)
+         #while x%2 == 0:
+            #x/=2
     if pow(a, x, n) == 1:
         return True
     while x < n - 1:
         if pow(a, x, n) == n - 1:
             return True
-        x <<= 1
+        x <<= 1 #même remarque (//2, %2 etc while x%2 == 0 alors x*=2)
+        #while x%2 ==0:
+            #x*=0
+
     return False
 
 def rabin_miller(n, k = 80):
