@@ -15,9 +15,10 @@ def factors():
     p = generate_primes(b)
     q = generate_primes(b)
     n = p*q
-    print("We have n = ", n)
+    print("\n")
+    print("We have n = %d \n" %n)
     phi = int((p - 1)*(q - 1))
-    print("We have phi(%d) = %d " %(n, phi))
+    print("We have phi(%d) = %d \n" %(n, phi))
     return n, phi
 
 def gcd_e(n, phi): #totient of n
@@ -34,7 +35,7 @@ def gcd_e(n, phi): #totient of n
         gcd = int(math.gcd(e, phi))
         if gcd == 1:
             break
-    print("We have e = ", e)
+    print("We have e = %d \n" %e)
     return e
 
 def find_inv(e, phi): #private key d
@@ -62,9 +63,9 @@ def outputs():
     n, phi = factors()
     e = gcd_e(n, phi)
     d = find_inv(e, phi)
-    print("We have d = %d" %d)
-    print("Public key : ", n, e)
-    print("Private key : ", d)
+    print("We have d = %d \n" %d)
+    print("Public key : %d %d \n" %(n,e))
+    print("Private key : %d \n" %d)
 
 def input_text():
     """
@@ -72,10 +73,14 @@ def input_text():
     :return: A list of the characters in the input string.
     """
     plain = input("Message to encrypt : ")
+    print("\n")
     plain_list  = []
     for k in range (len(plain)):
         plain_list.append(plain[k])
     print("The plain text is :", "".join(plain_list))
+    print("\n")
+    file = open("message.txt", "w")
+    file.write(plain)
     return plain_list
 
 def encrypt():
@@ -88,9 +93,10 @@ def encrypt():
     encrypt_list = []
     for i in range (len(plain_list)):
         plain_asc = ord(plain_list[i])
-        encrypt_asc = (plain_asc**e)%n
+        encrypt_asc = pow(plain_asc,e,n)
         encrypt_list.append(encrypt_asc)
     print("The encrypted message is : ", encrypt_list)
+    print("\n")
     return encrypt_list, e, n, d
 
 def recup():
@@ -98,8 +104,8 @@ def recup():
     return encrypt_list, n, d
 
 def recup_ssl():
-    global n, d, p, q, e
-    return n, d, p, q, e
+    global encrypt_list, n, d, p, q, e
+    return encrypt_list, n, d, p, q, e
 
 
 
