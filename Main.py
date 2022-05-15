@@ -8,14 +8,15 @@ import OpenSSLcheck
 
 def home():
     print("\n\n")
-    print("------------------------------------------Welcome------------------------------------------\n")
     print(" _____   _____           ______ _   _  _____ _______     _______ _______ _____ ____  _   _\n|  __ \ / ____|  /\     |  ____| \ | |/ ____|  __ \ \   / /  __ \__   __|_   _/ __ \| \ | |\n| |__) | (___   /  \    | |__  |  \| | |    | |__) \ \_/ /| |__) | | |    | || |  | |  \| |\n|  _  / \___ \ / /\ \   |  __| | . ` | |    |  _  / \   / |  ___/  | |    | || |  | | . ` |\n| | \ \ ____) / ____ \  | |____| |\  | |____| | \ \  | |  | |      | |   _| || |__| | |\  |\n|_|  \_\_____/_/    \_\ |______|_| \_|\_____|_|  \_\ |_|  |_|      |_|  |_____\____/|_| \_|\n")
     print("                                                     By Charles AIMIN and Alessandro GADRAT")
+    print("------------------------------------------Welcome------------------------------------------\n")
+    
 
 def menu():
     #source code from https://computinglearner.com/how-to-create-a-menu-for-a-python-console-application/
     print("\n\n")
-    options = {1: 'Generate a random prime number',2: 'Encrypt',3: 'Decrypt',4:'OpenSSl Keygen', 5: 'Exit',}
+    options = {1: 'Generate a random prime number',2: 'Encrypt',3: 'Decrypt',4:'OpenSSl Keygen',5:'Encrypt with OpenSSL and compare with our encryption' , 6: 'Exit',}
 
     def print_menu():
         for key in options.keys():
@@ -33,7 +34,13 @@ def menu():
         decrypt()
 
     def option4():
-        OpenSSLcheck.create_file()
+        OpenSSLcheck.create_prikey_file()
+        OpenSSLcheck.create_pubkey_file()
+    
+    def option5():
+        OpenSSLcheck.crypt_file()
+        OpenSSLcheck.encrypt_message()
+        OpenSSLcheck.decrypt_message()
 
     if __name__=='__main__':
         while(True):
@@ -52,6 +59,8 @@ def menu():
             elif option == 4:
                 option4()
             elif option == 5:
+                option5()
+            elif option == 6:
                 print('Thanks for using our program :)')
                 exit()
             else:
