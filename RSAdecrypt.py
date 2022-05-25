@@ -8,9 +8,10 @@ def decrypt():
     choice = int(input("\n\nYou want to\n 1 -- Decrypt your previous encryption\n 2 -- Extern encrypted text\n Enter your choice : "))
     if choice == 1:
         encrypt_list, n, d = recup()
+        
         decrypt_list = []
         for i in range (len(encrypt_list)):
-            decrypt_asc = (encrypt_list[i]**d)%n
+            decrypt_asc = pow(encrypt_list[i],d,n)
             decrypt_list.append(chr(decrypt_asc))
         print("The encrypted text : ", encrypt_list)
         print("The plain text is : %s" %("".join(decrypt_list)))
@@ -23,7 +24,7 @@ def decrypt():
             crypt_list[k] = int(crypt_list[k])
         decrypt_list = []
         for i in range (len(crypt_list)):
-            decrypt_asc = (crypt_list[i]**d)%n
+            decrypt_asc = pow(encrypt_list[i],d,n)
             decrypt_list.append(chr(decrypt_asc))
         print("The plain message is : %s" %("".join(decrypt_list)))
     else:
