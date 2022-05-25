@@ -1,6 +1,6 @@
 from Generateprimes import generate_primes
+#from Crypto.Cipher import PKCS1_OAEP #allow me to use padding on my plain text
 import math
-import time
 import random
 rand = random.SystemRandom()
 
@@ -12,6 +12,11 @@ def factors():
     """
     global p, q
     b = int(input("You want your factors n q to be what length (bits) : "))
+    """Cette partie sera utile pour avec la fonction -raw car le plaintext doit avoir la même taille (bits) que le produit n.
+    text = input("Enter plain text : ")
+    a = len(text.encode('utf-8'))
+    print(a)
+    b = int(a/2)"""
     p = generate_primes(b)
     q = generate_primes(b)
     n = p*q
@@ -72,6 +77,7 @@ def input_text():
     It takes a string, converts it to a list, and returns the list.
     :return: A list of the characters in the input string.
     """
+    global plain_list, plain
     plain = input("Message to encrypt : ")
     print("\n")
     plain_list  = []
@@ -81,31 +87,36 @@ def input_text():
     print("\n")
     file = open("message.txt", "w")
     file.write(plain)
-    return plain_list
+    return plain_list, plain
 
 def encrypt():
     """
-    It takes a list of characters, converts them to ASCII, encrypts them, and then converts them back to
-    encrypted characters.
+    It takes the input text, converts it to ASCII, encrypts it, and then converts it to hexadecimal
+    :return: the encrypted message, the public key, the modulus, the private key, and the encrypted
+    message in hexadecimal.
     """
-    global encrypt_list, e, n, d
-    plain_list = input_text()
+
+    global encrypt_list, e, n, d, encrypt_list_hex
+    plain_list, plain = input_text()
     encrypt_list = []
+    encrypt_list_hex = []
     for i in range (len(plain_list)):
         plain_asc = ord(plain_list[i])
         encrypt_asc = pow(plain_asc,e,n)
         encrypt_list.append(encrypt_asc)
-    print("The encrypted message is : ", encrypt_list)
+        encrypt_list_hex.append(hex(encrypt_list[i]))
+    print("The encrypted message is : ", encrypt_list_hex) #print le cypher text en liste hex pour faire plus h@k3r
     print("\n")
-    return encrypt_list, e, n, d
+
+    return encrypt_list, e, n, d, encrypt_list_hex
 
 def recup():
     global encrypt_list, n, d
     return encrypt_list, n, d
 
 def recup_ssl():
-    global encrypt_list, n, d, p, q, e
-    return encrypt_list, n, d, p, q, e
+    global encrypt_list, n, d, p, q, e, encrypt_list_hex
+    return encrypt_list, n, d, p, q, e, encrypt_list_hex
 
 
 
