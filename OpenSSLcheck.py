@@ -39,11 +39,11 @@ def gen_int():
     fill this part
     :return: n, d, p, q, e, e1, e2
     """
-    encrypt_list, n, d, p, q, e = recup_ssl()
+    encrypt_list, n, d, p, q, e,encrypt_list_hex = recup_ssl()
     global e1, e2
     e1 = d %(p-1)
     e2 = d %(q-1)
-    return encrypt_list, n, d, p, q, e, e1, e2
+    return encrypt_list, n, d, p, q, e, e1, e2, encrypt_list_hex
 
 def findModInverse():
     """
@@ -51,7 +51,7 @@ def findModInverse():
     :return: The mod inverse of the public key
     """
     #source : https://inventwithpython.com/cryptomath.py
-    encrypt_list, n, d, p, q, e = recup_ssl()
+    encrypt_list, n, d, p, q, e, encrypt_list_hex = recup_ssl()
     if math.gcd(q, p) != 1:
             return None # no mod inverse if a & m aren't relatively prime
 
@@ -68,7 +68,7 @@ def create_prikey_file():
     """
     It generates a private key file using the openssl command line tool with custom parameters from our program.
     """
-    encrypt_list, n, d, p, q, e, e1, e2 = gen_int()
+    encrypt_list, n, d, p, q, e, e1, e2, encrypt_list_hex = gen_int()
     u1 = findModInverse()
     file = open("prikey_conf.txt", "w")
     file.write("asn1=SEQUENCE:rsa_key\n\n")
@@ -114,7 +114,7 @@ def create_pubkey_file():
     The PEM format is the one that we will use to encrypt the message.
     """
 
-    encrypt_list, n, d, p, q, e, e1, e2 = gen_int()
+    encrypt_list, n, d, p, q, e, e1, e2, encrypt_list_hex = gen_int()
     file = open("pubkey_conf.txt", "w")
     file.write("asn1=SEQUENCE:rsa_key\n\n")
     file.write("[rsa_key]\n")
@@ -130,17 +130,17 @@ def crypt_file():
     """
     It creates a file called crypt.txt and writes the encrypted list (by our program) to it.
     """
-    encrypt_list, n, d, p, q, e, e1, e2 = gen_int()
+    encrypt_list, n, d, p, q, e, e1, e2, encrypt_list_hex = gen_int()
 
-    with open('crypt.txt', 'w') as f:
-        for item in (encrypt_list):
-            f.write("%s " %item)
+    file = open('crypt.txt', 'w')
+    file.write("%s" %encrypt_list_hex)
+    file.close()
 
 def encrypt_message():
     """
     It encrypts the message.txt file using the public key and stores it in top_secret.enc.
     """
-    os.system("openssl rsautl -encrypt -inkey pubkey.pem -pubin -in message.txt -out top_secret.enc")
+    os.system("openssl rsautl -encrypt -inkey pubkey.pem -pubin -in message.txt -out top_secret.enc") # add -raw
     try:
         with open('top_secret.enc'): pass
     except IOError:
@@ -154,7 +154,7 @@ def decrypt_message():
     """
     This function decrypts the message using the private key and outputs the decrypted message
     """
-    os.system("openssl rsautl -decrypt -in top_secret.enc -out plain_out.txt -inkey prikey.pem")
+    os.system("openssl rsautl  -decrypt -in top_secret.enc -out plain_out.txt -inkey prikey.pem") # add -raw
     print("The encrypted text is : ")
     os.system("cat plain_out.txt")
     print("\n")
