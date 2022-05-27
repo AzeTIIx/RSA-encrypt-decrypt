@@ -36,6 +36,7 @@ The function returns a text cypher as a hexadecimal list
 # Decrypting a message
 
 This feature contains several functions, you can : 
+
 -Decrypt a text cypher previously encrypted by the program. 
 
 **Dependent on the "encrypt" functionality**
